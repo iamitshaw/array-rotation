@@ -1,0 +1,98 @@
+#include <bits/stdc++.h>
+
+/* function prototype */
+void string_generator(char* input_string, size_t size_of_string);
+
+int main(int argc, char* argv[]) {
+
+    /* get the size of random string */
+    size_t size_of_string{7};
+
+    /* declare character array to store random_string */
+    char* input_string = new char[size_of_string + 1];
+
+    /* generate a random character array */
+    string_generator(input_string, size_of_string);
+    std::cout << "input string: " << input_string << std::endl;
+
+    auto* possible_string = new std::string[size_of_string];
+
+    /* store the possible strings */
+    std::cout << "possible string:" << std::endl;
+    for (size_t i{0};i < size_of_string;i++) {
+
+        /* store each string character */
+        for (size_t j{0};j < size_of_string;j++) {
+            possible_string[i].push_back(input_string[(i+j)%size_of_string]);
+        }
+
+        /* null terminated string */
+        possible_string[i].push_back('\0');
+    }
+
+    /* print each possible string */
+    for (size_t i{0};i < size_of_string;i++) {
+        std::cout << possible_string[i] << std::endl;
+    }
+
+    std::sort(possible_string, possible_string + size_of_string);
+
+    /* print each possible string */
+    std::cout << "sorted string: " << std::endl;
+    for (size_t i{0};i < size_of_string;i++) {
+        std::cout << possible_string[i] << std::endl;
+    }
+    /* print the lexicographic minimum string */
+    std::cout << "lexicographic minimum string: " << possible_string[0] << std::endl;
+
+    /* de-allocate the heap memory */
+    delete [] input_string;
+    delete [] possible_string;
+
+    return 0;
+}
+
+/* generate a random character array consist of
+ * only uppercase letters and lowercase letters */
+void string_generator(char* input_string, size_t size_of_string) {
+
+    /* define a seed value for random_number_generator */
+    auto seed{std::chrono::system_clock::now().time_since_epoch().count()};
+
+    /* declare a random_generator with a seeded value */
+    std::mt19937 random_generator(seed);
+
+    std::uniform_int_distribution<size_t> distinct_upper_case('A', 'Z');
+    std::uniform_int_distribution<size_t> distinct_lower_case('a', 'z');
+
+    /* define an range for random numbers */
+    std::uniform_int_distribution<size_t> distinct_type(1, 2);
+
+    size_t current_character_type; char character;
+
+    for (size_t i{0};i < size_of_string;i++) {
+
+        /* generate a random character type */
+        current_character_type = {distinct_type(random_generator)};
+
+        switch(current_character_type){
+            /* upper-case letters */
+            case 1: {
+                character = distinct_upper_case(random_generator);break;
+            }
+            /* lower-case letters */
+            case 2: {
+                character = distinct_lower_case(random_generator);break;
+            }
+            default: {
+                std::cout << "Invalid CAPTCHA!\n" << std::endl;break;
+            }
+        }
+
+        /* assign the current generated character */
+        input_string[i] = character;
+    }
+
+    /* null terminated array of characters */
+    input_string[size_of_string] = '\0';
+}

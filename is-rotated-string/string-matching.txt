@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+
+/* function prototype */
+bool is_rotated_string(const std::string& first_string, const std::string& second_string);
+
+/* string-matching approach */
+int main(int argc, char* argv[]) {
+    std::string first_string{"amazon"};
+    std::string second_string{"azonam"};
+
+    bool is_rotated = {is_rotated_string(first_string, second_string)};
+
+    if (is_rotated) {
+        /* if first_string and second_string are rotation of each other */
+        std::cout << "\"" << first_string << "\" and \"" << second_string ;
+        std::cout << "\" are rotation of each other!" << std::endl;
+    } else {
+        /* if first_string and second_string are not rotation of each other */
+        std::cout << "\"" << first_string << "\" and \""<< second_string ;
+        std::cout << "\" aren't rotation of each other!" << std::endl;
+    }
+    return 0;
+}
+
+/* a function to check whether or not first_string
+ * and second_string are rotation of each other */
+bool is_rotated_string(const std::string& first_string, const std::string& second_string) {
+
+    /* compute the length of first_string and second_string */
+    size_t first_length{first_string.length()};
+    size_t second_length{second_string.length()};
+
+    /* check whether or not size of first_string and second_string are same*/
+    if (first_length != second_length) {
+        return false;
+    } else {
+        /* if size of first_string and second string are same */
+        std::string temp_string = {first_string + first_string};
+        return temp_string.find(second_string) != std::string::npos;
+    }
+}
